@@ -15,6 +15,25 @@ def _response(payload: object, status_code: int = 200) -> httpx.Response:
 
 
 @pytest.mark.asyncio
+async def test_missing_api_key_is_reported_before_request() -> None:
+    requests = 0
+
+    def handler(_request: httpx.Request) -> httpx.Response:
+        nonlocal requests
+        requests += 1
+        return _response({})
+
+    client = NeisClient("", transport=httpx.MockTransport(handler))
+
+    with pytest.raises(NeisError) as error:
+        await client.search_schools("한빛", 1, 10)
+    await client.close()
+
+    assert requests == 0
+    assert error.value.code == "NEIS_API_KEY_MISSING"
+
+
+@pytest.mark.asyncio
 async def test_search_schools_parses_pagination_and_school() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         assert request.url.params["SCHUL_NM"] == "한빛"

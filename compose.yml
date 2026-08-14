@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
     environment:
-      NEIS_API_KEY: ${NEIS_API_KEY:-sample}
+      NEIS_API_KEY: ${NEIS_API_KEY:-}
       NEIS_BASE_URL: ${NEIS_BASE_URL:-https://open.neis.go.kr}
       CORS_ORIGINS: http://localhost:3000
     healthcheck:

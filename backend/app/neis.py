@@ -124,6 +124,11 @@ class NeisClient:
         ]
 
     async def _get(self, path: str, params: dict[str, str]) -> dict[str, JsonValue]:
+        if not self._api_key:
+            raise NeisError(
+                "NEIS_API_KEY_MISSING",
+                "NEIS API 키가 설정되지 않았습니다. .env 파일을 확인해 주세요.",
+            )
         request_params = {
             "Key": self._api_key,
             "Type": "json",

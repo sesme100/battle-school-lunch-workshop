@@ -21,7 +21,7 @@ from app.neis import NeisClient, NeisError, NeisTimeoutError
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     client = NeisClient(
-        api_key=os.getenv("NEIS_API_KEY", "sample"),
+        api_key=os.getenv("NEIS_API_KEY", ""),
         base_url=os.getenv("NEIS_BASE_URL", "https://open.neis.go.kr"),
     )
     app.state.neis_client = client
