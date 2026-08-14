@@ -57,6 +57,25 @@ module backendIdentity './modules/managed-identity.bicep' = {
   }
 }
 
+module registryPullIdentity './modules/managed-identity.bicep' = {
+  name: 'registryPullIdentity'
+  scope: resourceGroup
+  params: {
+    name: 'id-${take(normalizedEnvironmentName, 16)}-acrpull-${resourceSuffix}'
+    location: location
+    tags: commonTags
+  }
+}
+
+module registryAcrPull './modules/acr-pull-role.bicep' = {
+  name: 'registryAcrPull'
+  scope: resourceGroup
+  params: {
+    acrName: registry.outputs.name
+    principalId: registryPullIdentity.outputs.principalId
+  }
+}
+
 module secrets './modules/key-vault.bicep' = {
   name: 'keyVault'
   scope: resourceGroup
@@ -94,6 +113,8 @@ module backend './modules/container-app.bicep' = {
     })
     serviceName: 'backend'
     environmentId: containerEnvironment.outputs.id
+    registryServer: registry.outputs.loginServer
+    registryIdentityId: registryPullIdentity.outputs.id
     targetPort: 80
     externalIngress: false
     userAssignedIdentityId: backendIdentity.outputs.id
@@ -117,6 +138,9 @@ module backend './modules/container-app.bicep' = {
       }
     ]
   }
+  dependsOn: [
+    registryAcrPull
+  ]
 }
 
 module frontend './modules/container-app.bicep' = {
@@ -130,6 +154,8 @@ module frontend './modules/container-app.bicep' = {
     })
     serviceName: 'frontend'
     environmentId: containerEnvironment.outputs.id
+    registryServer: registry.outputs.loginServer
+    registryIdentityId: registryPullIdentity.outputs.id
     targetPort: 80
     externalIngress: true
     environmentVariables: [
@@ -139,24 +165,9 @@ module frontend './modules/container-app.bicep' = {
       }
     ]
   }
-}
-
-module backendAcrPull './modules/acr-pull-role.bicep' = {
-  name: 'backendAcrPull'
-  scope: resourceGroup
-  params: {
-    acrName: registry.outputs.name
-    principalId: backend.outputs.systemAssignedPrincipalId
-  }
-}
-
-module frontendAcrPull './modules/acr-pull-role.bicep' = {
-  name: 'frontendAcrPull'
-  scope: resourceGroup
-  params: {
-    acrName: registry.outputs.name
-    principalId: frontend.outputs.systemAssignedPrincipalId
-  }
+  dependsOn: [
+    registryAcrPull
+  ]
 }
 
 output AZURE_RESOURCE_GROUP string = resourceGroup.name

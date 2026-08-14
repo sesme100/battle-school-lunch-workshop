@@ -5,6 +5,8 @@ param location string = resourceGroup().location
 param tags object = {}
 param serviceName string
 param environmentId string
+param registryServer string
+param registryIdentityId string
 param targetPort int
 param externalIngress bool
 param environmentVariables array = []
@@ -14,25 +16,35 @@ param keyVaultSecretUri string = ''
 var hasUserAssignedIdentity = !empty(userAssignedIdentityId)
 var hasKeyVaultSecret = !empty(keyVaultSecretUri)
 var placeholderImage = 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+var userAssignedIdentities = union(
+  {
+    '${registryIdentityId}': {}
+  },
+  hasUserAssignedIdentity
+    ? {
+        '${userAssignedIdentityId}': {}
+      }
+    : {}
+)
 
 resource app 'Microsoft.App/containerApps@2024-03-01' = {
   name: name
   location: location
   tags: tags
-  identity: hasUserAssignedIdentity
-    ? {
-        type: 'SystemAssigned, UserAssigned'
-        userAssignedIdentities: {
-          '${userAssignedIdentityId}': {}
-        }
-      }
-    : {
-        type: 'SystemAssigned'
-      }
+  identity: {
+    type: 'SystemAssigned, UserAssigned'
+    userAssignedIdentities: userAssignedIdentities
+  }
   properties: {
     environmentId: environmentId
     configuration: {
       activeRevisionsMode: 'Single'
+      registries: [
+        {
+          server: registryServer
+          identity: registryIdentityId
+        }
+      ]
       ingress: {
         external: externalIngress
         targetPort: targetPort

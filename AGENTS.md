@@ -116,7 +116,7 @@ pytest
 `NEIS_API_KEY`를 로컬에만 설정한 후 실행합니다.
 
 ```sh
-docker compose config
+docker compose config --no-interpolate
 docker compose up --build
 ```
 

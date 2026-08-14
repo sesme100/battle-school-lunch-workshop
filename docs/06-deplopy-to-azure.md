@@ -40,27 +40,32 @@
     ```bash
     azd show
     az bicep build --file infra/main.bicep
-    docker compose config
+    docker compose config --no-interpolate
     ```
 
    프론트엔드와 백엔드의 테스트, 린트와 빌드도
    [README](../README.md)의 명령으로 실행합니다.
 
 1. azd 환경에 대상 구독과 리전을 설정하고, 실제 `NEIS_API_KEY`는 셸의
-   비공개 입력 기능을 사용해 로컬 azd 환경에만 저장합니다. 키를 소스,
-   프롬프트, 명령 예시 또는 로그에 기록하지 마세요.
+   비공개 입력 기능을 사용해 설정합니다. 키를 소스, 프롬프트, 명령 예시
+   또는 로그에 기록하지 마세요. Key Vault 생성 후
+   `azd env set-secret NEIS_API_KEY`를 실행해 로컬 평문을 Key Vault
+   참조로 교체합니다.
 
 1. 계획의 대상 구독, 리전, 생성 리소스와 예상 비용을 사용자에게 보여 주고
    명시적인 배포 승인을 받습니다.
 
    > [!WARNING]
-   > 다음 `azd up` 명령은 Azure 리소스를 만들고 비용을 발생시킬 수
+   > 다음 `azd provision` 명령은 Azure 리소스를 만들고 비용을 발생시킬 수
    > 있습니다. 준비나 검증 승인을 실제 배포 승인으로 간주하지 마세요.
 
-1. 승인을 받은 뒤 아래 명령어를 이용해서 앱을 배포합니다.
+1. 승인을 받은 뒤 인프라를 생성하고 Key Vault 참조를 설정한 다음 앱을
+   배포합니다.
 
     ```bash
-    azd up
+    azd provision --no-prompt
+    azd env set-secret NEIS_API_KEY
+    azd deploy --no-prompt
     ```
 
    ![`azd up` 명령어로 앱 배포하기](./images/06-deplopy-to-azure-01.jpg)

@@ -121,14 +121,16 @@ docker compose --profile test run --rm e2e
 멀티에이전트 앱은 같은 환경과 레지스트리에 컨테이너로 추가할 수 있습니다.
 
 배포 전 Azure CLI와 azd 인증을 완료하고 환경을 구성합니다. 실제
-`NEIS_API_KEY`는 소스나 명령 예시에 기록하지 말고 로컬 azd 환경에만
-저장하세요.
+`NEIS_API_KEY`는 소스, 프롬프트, 명령 예시 또는 로그에 기록하지 마세요.
+최초 프로비저닝에는 셸의 비공개 입력을 사용하고, Key Vault 생성 후에는
+`azd env set-secret NEIS_API_KEY`로 로컬 평문을 Key Vault 참조로
+교체합니다.
 
 ```sh
 azd env new dev --no-prompt
 azd env set AZURE_SUBSCRIPTION_ID <subscription-id>
 azd env set AZURE_LOCATION koreacentral
-# 셸의 비공개 입력 기능으로 NEIS_API_KEY를 읽은 뒤 azd env set을 실행합니다.
+# 셸의 비공개 입력 기능으로 NEIS_API_KEY를 읽은 뒤 azd 환경을 설정합니다.
 ```
 
 구성은 리소스를 만들지 않고 다음 명령으로 확인할 수 있습니다.
@@ -136,13 +138,16 @@ azd env set AZURE_LOCATION koreacentral
 ```sh
 azd show
 az bicep build --file infra/main.bicep
-docker compose config
+docker compose config --no-interpolate
 ```
 
-환경 설정과 비용을 검토한 뒤에만 다음 명령으로 배포합니다.
+환경 설정과 비용을 검토한 뒤에만 인프라와 애플리케이션을 순서대로
+배포합니다.
 
 ```sh
-azd up
+azd provision --no-prompt
+azd env set-secret NEIS_API_KEY
+azd deploy --no-prompt
 ```
 
 ## 추가 학습 자료
