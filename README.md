@@ -102,6 +102,54 @@ Compose 환경의 E2E 테스트는 애플리케이션 실행 후 별도 터미�
 docker compose --profile test run --rm e2e
 ```
 
+## Azure 배포
+
+워크숍 06단계 결과로 Azure Developer CLI와 Bicep 구성이 포함되어 있습니다.
+`azure.yaml`은 프론트엔드와 백엔드를 같은 Azure Container Apps 환경에
+배포하고, `infra/`는 다음 리소스를 환경별로 생성합니다.
+
+- Azure Container Apps 2개(프론트엔드 공개, 백엔드 내부 전용)
+- Azure Container Registry Basic
+- Container Apps Environment
+- Log Analytics 및 Application Insights
+- Key Vault와 백엔드용 관리 ID
+
+두 앱은 `minReplicas: 0`으로 scale-to-zero하며, Korea Central의 공개
+소매가와 워크숍 수준 트래픽을 기준으로 예상 비용은 월
+**USD 5.2-6.5**입니다. ACR Basic(약 USD 5.07/월)이 주 비용이며 사용량이
+무료 할당량을 넘으면 실제 비용이 증가할 수 있습니다. 이후 MCP 서버와
+멀티에이전트 앱은 같은 환경과 레지스트리에 컨테이너로 추가할 수 있습니다.
+
+배포 전 Azure CLI와 azd 인증을 완료하고 환경을 구성합니다. 실제
+`NEIS_API_KEY`는 소스, 프롬프트, 명령 예시 또는 로그에 기록하지 마세요.
+최초 프로비저닝에는 셸의 비공개 입력을 사용하고, Key Vault 생성 후에는
+`azd env set-secret NEIS_API_KEY`로 로컬 평문을 Key Vault 참조로
+교체합니다.
+
+```sh
+azd env new dev --no-prompt
+azd env set AZURE_SUBSCRIPTION_ID <subscription-id>
+azd env set AZURE_LOCATION koreacentral
+# 셸의 비공개 입력 기능으로 NEIS_API_KEY를 읽은 뒤 azd 환경을 설정합니다.
+```
+
+구성은 리소스를 만들지 않고 다음 명령으로 확인할 수 있습니다.
+
+```sh
+azd show
+az bicep build --file infra/main.bicep
+docker compose config --no-interpolate
+```
+
+환경 설정과 비용을 검토한 뒤에만 인프라와 애플리케이션을 순서대로
+배포합니다.
+
+```sh
+azd provision --no-prompt
+azd env set-secret NEIS_API_KEY
+azd deploy --no-prompt
+```
+
 ## 추가 학습 자료
 
 - [GitHub Copilot cloud agent 알아보기](https://docs.github.com/copilot/concepts/agents/coding-agent/about-coding-agent)
