@@ -5,6 +5,8 @@
 .env
 .env.*
 !.env.example
+.copilot-azure/
+.azure/*/.env
 
 # Node.js
 node_modules/
