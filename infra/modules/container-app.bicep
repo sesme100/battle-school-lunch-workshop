@@ -5,7 +5,6 @@ param location string = resourceGroup().location
 param tags object = {}
 param serviceName string
 param environmentId string
-param registryServer string
 param targetPort int
 param externalIngress bool
 param environmentVariables array = []
@@ -34,12 +33,6 @@ resource app 'Microsoft.App/containerApps@2024-03-01' = {
     environmentId: environmentId
     configuration: {
       activeRevisionsMode: 'Single'
-      registries: [
-        {
-          server: registryServer
-          identity: 'system'
-        }
-      ]
       ingress: {
         external: externalIngress
         targetPort: targetPort

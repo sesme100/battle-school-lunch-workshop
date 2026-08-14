@@ -94,7 +94,6 @@ module backend './modules/container-app.bicep' = {
     })
     serviceName: 'backend'
     environmentId: containerEnvironment.outputs.id
-    registryServer: registry.outputs.loginServer
     targetPort: 80
     externalIngress: false
     userAssignedIdentityId: backendIdentity.outputs.id
@@ -131,7 +130,6 @@ module frontend './modules/container-app.bicep' = {
     })
     serviceName: 'frontend'
     environmentId: containerEnvironment.outputs.id
-    registryServer: registry.outputs.loginServer
     targetPort: 80
     externalIngress: true
     environmentVariables: [
