@@ -107,6 +107,9 @@
 
 ## Git 커밋 및 Pull Request
 
+- 직접 브랜치를 생성하는 경우 `CONTRIBUTING.md`에 따라 `feat/`, `fix/`,
+  `docs/` 중 하나의 접두사를 사용하세요. 도구가 브랜치를 자동으로
+  생성·관리하는 환경에서는 해당 도구의 브랜치를 그대로 사용하세요.
 - 커밋 메시지는 `CONTRIBUTING.md`에 정의된 Conventional Commits 형식을
   따르고 하나의 논리적 변경에 집중하세요.
 - 관련 없는 변경을 같은 커밋이나 Pull Request에 포함하지 마세요.
