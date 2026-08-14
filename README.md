@@ -89,6 +89,13 @@ python -m pip install -e ".[dev]"
 pytest
 ```
 
+백엔드를 직접 실행할 때도 저장소 루트의 `.env`를 읽습니다.
+
+```sh
+cd backend
+uvicorn app.main:app --reload
+```
+
 Compose 환경의 E2E 테스트는 애플리케이션 실행 후 별도 터미널에서 실행합니다.
 
 ```sh

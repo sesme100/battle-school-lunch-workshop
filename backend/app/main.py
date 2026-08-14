@@ -2,7 +2,9 @@ import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from datetime import date
+from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -16,6 +18,8 @@ from app.models import (
     SchoolSearchResponse,
 )
 from app.neis import NeisClient, NeisError, NeisTimeoutError
+
+load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 
 @asynccontextmanager
