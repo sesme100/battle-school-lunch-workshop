@@ -1,0 +1,50 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    environment:
+      NEIS_API_KEY: ${NEIS_API_KEY:-}
+      NEIS_BASE_URL: ${NEIS_BASE_URL:-https://open.neis.go.kr}
+      CORS_ORIGINS: http://localhost:3000
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health')",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: /api
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1/"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    ports:
+      - "3000:80"
+
+  e2e:
+    profiles: ["test"]
+    image: mcr.microsoft.com/playwright:v1.62.1-noble
+    depends_on:
+      frontend:
+        condition: service_healthy
+    working_dir: /work
+    volumes:
+      - ./frontend:/work
+    environment:
+      PLAYWRIGHT_BASE_URL: http://frontend
+    command: sh -c "npm ci && npx playwright test"

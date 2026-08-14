@@ -73,3 +73,17 @@ jobs:
       - name: Await Compose scaffold
         if: ${{ hashFiles('compose.yml', 'compose.yaml', 'docker-compose.yml', 'docker-compose.yaml') == '' }}
         run: echo "No Compose file is present yet; skipping configuration validation."
+
+  e2e:
+    name: End-to-end
+    runs-on: ubuntu-latest
+    needs: [frontend, backend, compose]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build and start application
+        run: docker compose up --build --detach --wait frontend
+      - name: Run browser flow
+        run: docker compose --profile test run --rm e2e
+      - name: Stop application
+        if: always()
+        run: docker compose --profile test down --volumes
