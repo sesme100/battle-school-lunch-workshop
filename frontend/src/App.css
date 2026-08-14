@@ -1,0 +1,396 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700&family=Noto+Sans+KR:wght@400;700&display=swap");
+
+:root {
+  color: #2c3e50;
+  background: #fff;
+  font-family: "Lato", "Noto Sans KR", "Helvetica Neue", Arial, sans-serif;
+  font-synthesis: none;
+  scroll-behavior: smooth;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: 88px;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3,
+.brand,
+.nav-links {
+  font-family: "Montserrat", "Noto Sans KR", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.site-nav {
+  position: fixed;
+  z-index: 100;
+  inset: 0 0 auto;
+  color: #fff;
+  background: #2c3e50;
+}
+
+.nav-container {
+  display: flex;
+  width: min(1140px, calc(100% - 40px));
+  min-height: 104px;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-size: 2rem;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.04em;
+}
+
+.nav-links a {
+  padding: 14px 16px;
+  border-radius: 7px;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus-visible {
+  color: #fff;
+  background: #18bc9c;
+  outline: none;
+}
+
+.hero {
+  padding: 184px 24px 96px;
+  color: #fff;
+  text-align: center;
+  background: #18bc9c;
+}
+
+.hero-content {
+  display: grid;
+  justify-items: center;
+}
+
+.lunch-avatar {
+  width: min(250px, 60vw);
+  margin-bottom: 28px;
+}
+
+.lunch-avatar svg {
+  display: block;
+  width: 100%;
+  filter: drop-shadow(0 14px 0 rgba(35, 49, 64, 0.12));
+}
+
+.hero h1 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(3rem, 9vw, 5.25rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.hero-tagline {
+  font-size: clamp(1.15rem, 3vw, 1.65rem);
+  font-weight: 400;
+}
+
+.star-divider {
+  display: flex;
+  width: min(250px, 70vw);
+  margin: 24px auto 30px;
+  align-items: center;
+  gap: 14px;
+  color: #2c3e50;
+}
+
+.star-divider::before,
+.star-divider::after {
+  height: 5px;
+  flex: 1;
+  background: currentColor;
+  content: "";
+}
+
+.star-divider span {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.star-divider.light {
+  color: #fff;
+}
+
+.content-section {
+  padding: 96px 24px;
+  background: #fff;
+}
+
+.accent-section {
+  color: #fff;
+  background: #18bc9c;
+}
+
+.section-container {
+  display: grid;
+  width: min(1060px, 100%);
+  margin: 0 auto;
+  gap: 30px;
+}
+
+.section-title {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.section-title h1 {
+  margin: 0;
+  font-size: clamp(2.3rem, 6vw, 3.25rem);
+  line-height: 1.1;
+}
+
+.section-title > span {
+  font-size: 1.2rem;
+}
+
+.search-form,
+.date-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 14px;
+  width: min(780px, 100%);
+  margin: 0 auto;
+}
+
+.date-form {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+}
+
+.search-form button,
+.date-form button,
+.school-card button,
+.pagination button {
+  min-height: 44px;
+  border: 2px solid #18bc9c;
+  border-radius: 7px;
+  color: #fff;
+  background: #18bc9c;
+  font-family: "Montserrat", "Noto Sans KR", sans-serif;
+  font-weight: 700;
+}
+
+.accent-section .date-form button {
+  border-color: #fff;
+  color: #18bc9c;
+  background: #fff;
+}
+
+.accent-section .fui-Field__label,
+.accent-section .fui-Field__hint {
+  color: #fff;
+}
+
+.school-grid,
+.meal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.school-card,
+.meal-card {
+  min-height: 220px;
+  gap: 13px;
+  padding: 28px;
+  border: 0;
+  border-radius: 0;
+  background: #f3f6f7;
+  box-shadow: none;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.school-card:hover {
+  color: #fff;
+  background: #18bc9c;
+  transform: translateY(-4px);
+}
+
+.school-card.selected {
+  color: #fff;
+  background: #2c3e50;
+  outline: 6px solid rgba(24, 188, 156, 0.28);
+}
+
+.school-card:hover button,
+.school-card.selected button {
+  border-color: #fff;
+  color: #2c3e50;
+  background: #fff;
+}
+
+.meal-card {
+  position: relative;
+  min-height: 260px;
+  overflow: hidden;
+  border-top: 8px solid #18bc9c;
+}
+
+.meal-card::after {
+  position: absolute;
+  right: -24px;
+  bottom: -34px;
+  color: rgba(24, 188, 156, 0.12);
+  font-size: 7rem;
+  content: "★";
+}
+
+.meal-card ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+  font-size: 1.05rem;
+}
+
+.result-count,
+.selected-school {
+  justify-self: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.pagination button:disabled {
+  border-color: #bdc3c7;
+  color: #68737a;
+  background: #ecf0f1;
+}
+
+.empty-prompt {
+  width: min(680px, 100%);
+  margin: 0 auto;
+  padding: 26px;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.disabled-step .section-container {
+  opacity: 0.9;
+}
+
+footer {
+  color: #fff;
+  text-align: center;
+  background: #2c3e50;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: min(1060px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 64px 0 46px;
+  gap: 44px;
+}
+
+.footer-main h2 {
+  margin: 0 0 22px;
+  font-size: 1.35rem;
+}
+
+.footer-main p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.footer-main a {
+  color: #18bc9c;
+}
+
+.footer-bottom {
+  padding: 24px;
+  background: #233140;
+}
+
+@media (max-width: 760px) {
+  html {
+    scroll-padding-top: 72px;
+  }
+
+  .nav-container {
+    min-height: 72px;
+  }
+
+  .brand {
+    font-size: 1.35rem;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 126px;
+  }
+
+  .content-section {
+    padding: 72px 18px;
+  }
+
+  .search-form,
+  .date-form,
+  .footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .search-form button,
+  .date-form button {
+    width: 100%;
+  }
+
+  .footer-main {
+    gap: 36px;
+  }
+}

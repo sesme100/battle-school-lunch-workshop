@@ -56,6 +56,44 @@ NEIS 공개 API를 활용해 초중고 급식 메뉴를 조회하고 AI 에이�
 
 프론트엔드, 백엔드 및 배포 관련 소스는 워크숍을 진행하면서 참가자의 저장소에 생성됩니다.
 
+## 애플리케이션 실행
+
+Issue #5 구현 이후에는 React 프론트엔드와 FastAPI 백엔드를 Docker Compose로
+함께 실행할 수 있습니다.
+
+1. `.env.example`을 `.env`로 복사하고 `NEIS_API_KEY` 값을 입력합니다.
+2. 다음 명령을 실행합니다.
+
+   ```sh
+   docker compose up --build
+   ```
+
+3. 브라우저에서 `http://localhost:3000`을 엽니다. 백엔드 API 문서는
+   `http://localhost:8000/api/docs`에서 확인할 수 있습니다.
+
+`sample` 키는 NEIS 정책상 첫 페이지 5건으로 제한되므로 페이지 검색을
+사용하려면 발급받은 API 키를 설정해야 합니다.
+
+로컬 개발 및 검증 명령은 다음과 같습니다.
+
+```sh
+cd frontend
+npm install
+npm run lint
+npm run build
+npm test
+
+cd ../backend
+python -m pip install -e ".[dev]"
+pytest
+```
+
+Compose 환경의 E2E 테스트는 애플리케이션 실행 후 별도 터미널에서 실행합니다.
+
+```sh
+docker compose --profile test run --rm e2e
+```
+
 ## 추가 학습 자료
 
 - [GitHub Copilot cloud agent 알아보기](https://docs.github.com/copilot/concepts/agents/coding-agent/about-coding-agent)
